@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, Salan&#39;s blog">
+    <meta name="keywords" content="OOPre博客总结, Salan&#39;s blog">
     <meta name="description" content="记录学习过程~">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello World | Salan&#39;s blog</title>
+    <title>OOPre博客总结 | Salan&#39;s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -288,12 +288,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello World</h1>
+                    <h1 class="description center-align post-title">OOPre博客总结</h1>
                 </div>
             </div>
         </div>
@@ -421,7 +421,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-10-18
+                    2023-12-17
                 </div>
                 
 
@@ -442,19 +442,74 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+                <h1 id="OOPre博客总结"><a href="#OOPre博客总结" class="headerlink" title="OOPre博客总结"></a>OOPre博客总结</h1><ol>
+<li><h5 id="作业最终的架构设计-在迭代中的架构调整及考虑"><a href="#作业最终的架构设计-在迭代中的架构调整及考虑" class="headerlink" title="作业最终的架构设计,  在迭代中的架构调整及考虑"></a>作业最终的架构设计,  在迭代中的架构调整及考虑</h5><p><img src="/tree.png" alt="tree"></p>
+<p><strong><u>架构设计</u></strong></p>
+<ul>
+<li><p><code>Main</code>类作为顶层处理模块，因业务需求还不是那么复杂，就直接负责读入命令与调用相应的方法，管理冒险者列表。</p>
+</li>
+<li><p><code>Adventurer</code>类作为主要业务逻辑体，基本上所有命令都是围绕其展开。负责冒险者相关的功能。</p>
+</li>
+<li><p><code>Logs</code>类负责管理战斗模式以及存储、查询日志。</p>
+</li>
+<li><p><code>Store</code>类负责处理冒险者购买与出售物品。</p>
+</li>
+<li><p><code>Commodity</code>类作为价值体的抽象类。子类<code>Food</code>、<code>Bottle</code>、<code>Equipment</code>等负责其相关的功能。</p>
+</li>
+</ul>
+<p><strong><u>架构调整</u></strong></p>
+</li>
+</ol>
+<p>迭代中，针对要求，进行<del>屎山</del>开发	</p>
+<ul>
+<li><p>冒险者背包需求，并未新增类，笔者认为对背包的操作还是以冒险者为主体，利用现有的容器<code>HashMap</code>，将三种物品抽象成一个类，存入放在<code>Adventurer</code>中即可，对背包内的操作也主要是增查删改，<code>HashMap</code>够用了。</p>
+</li>
+<li><p>需要记录战斗日志，添加<code>Logs</code>类，存储日志与输出日志</p>
+</li>
+<li><p>在对药水和装备进行分类时，为<code>Bottle</code>和<code>Equipment</code>添加多个子类，继承共有的属性方法，并通过重载实现它们不同的效果。</p>
+</li>
+<li><p>计算价值时，添加抽象类<code>Commodity</code>，给出价值体的通用属性和方法</p>
+</li>
+<li><p>冒险者购买与售卖物品等功能，封装到<code>Store</code>商店内。</p>
+</li>
+</ul>
+<hr>
+<ol start="2">
+<li><h5 id="使用junit的心得体会"><a href="#使用junit的心得体会" class="headerlink" title="使用junit的心得体会"></a>使用junit的心得体会</h5><ol>
+<li><p>不必对每个方法都进行测试，比如一个<code>getId()</code>，就直接return一个Id，写一个test没什么意义。</p>
+<p>换句话说，应该对逻辑较为复杂，对应具体功能的方法进行测试，而部分简单的方法在测试中基本上就会被调用。</p>
+</li>
+<li><p>要覆盖方法的所有分支，并针对数据的上下界以及0等特殊值进行测试。编写数据是比较麻烦的，可以尝试自动化生成测试数据。</p>
+</li>
+<li><p>可以重定向输入以模拟命令行输入。</p>
+</li>
+</ol>
+</li>
+</ol>
+<hr>
+<ol start="3">
+<li><h5 id="学习oopre的心得体会"><a href="#学习oopre的心得体会" class="headerlink" title="学习oopre的心得体会"></a>学习oopre的心得体会</h5><p>面向对象编程是一种广泛使用的编程范式,它以对象的思想为核心。面向对象编程有以下几个特点:</p>
+<ol>
+<li>封装 - 面向对象编程强调将对象的属性和行为封装到对象内部,外界无法直接访问,只能通过对象提供的接口来访问。这有助于隐藏实现细节,提高代码的模块化程度。</li>
+<li>继承 - 继承可以使得子类继承父类的属性和行为,增加了代码的重用性和可维护性。子类可以扩展和自定义父类的功能。</li>
+<li>多态 - 多态使得调用相同的方法可以有不同的响应,增加了程序的灵活性。子类可以覆盖父类的方法来实现多态。</li>
+<li>抽象 - 抽象类和接口可以将类中共有的属性和行为进行抽象,提取共性而忽略个性,有利于抽象思考和减少重复代码。</li>
+<li>组合 - 组合使得类具有包含其他对象的能力,可以灵活地建立起复杂的对象之间的关系,增强了面向对象编程的表现力。</li>
+<li>设计原则 - 面向对象编程还提出了一些设计原则,如单一职责原则、开闭原则等,这有助于编写灵活、可复用、可维护的代码。</li>
+<li>模拟实体 - 面向对象编程可以通过模拟实际世界中的实体及其关系,使程序更贴近现实场景,增加了代码的可读性。</li>
+</ol>
+<p><u>在编写代码之前，要先在脑中构建好实现功能需要的类以及它们之间的关系，尽量保证对象的独立性，业务逻辑之间足够清晰，不然将会给编写代码带来极大的麻烦，甚至需要进行代码重构。</u></p>
+<p>碎碎念：上一次写大项目还是在<del>上一次</del>，经过数据结构一份.c写完大作业，这次的迭代开发还是积累了很多写大项目(?)的经验，以往写的代码量少，没什么架构，能跑就完了，现在写大项目，再不规划架构，人和代码总得跑一个，人和学分总得没一个。</p>
+</li>
+</ol>
+<hr>
+<ol start="4">
+<li><h5 id="对oopre课程的简单建议"><a href="#对oopre课程的简单建议" class="headerlink" title="对oopre课程的简单建议"></a>对oopre课程的简单建议</h5><ul>
+<li>oopre绝世好课，希望加大力度，最后几次迭代把互测环节加进去，让我们提前熟悉一下</li>
+<li>希望课上可以展示上次作业写得比较好的代码，以供参考<del>（不然自己写的烂也没有自知之明</del></li>
+</ul>
+</li>
+</ol>
 
                 
             </div>
@@ -481,7 +536,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://salanfeng.github.io/2023/10/18/hello-world/">https://salanfeng.github.io/2023/10/18/hello-world/</a>
+                    <a href="https://salanfeng.github.io/2023/12/17/OOPre%E5%8D%9A%E5%AE%A2%E6%80%BB%E7%BB%93/">https://salanfeng.github.io/2023/12/17/OOPre%E5%8D%9A%E5%AE%A2%E6%80%BB%E7%BB%93/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -686,54 +741,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/12/10/benchmark/">
+                <a href="/2023/12/17/OOPre%E5%8D%9A%E5%AE%A2%E6%80%BB%E7%BB%93/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="如何在服务器使用docker运行NVIDIA HPC-Benchmarks？">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="OOPre博客总结">
                         
-                        <span class="card-title">如何在服务器使用docker运行NVIDIA HPC-Benchmarks？</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-12-10
-                        </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            Salan
-                            
-                        </span>
-                    </div>
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
-            </div>
-            <div class="card">
-                <a href="/2023/10/18/hello-world/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="Hello World">
-                        
-                        <span class="card-title">Hello World</span>
+                        <span class="card-title">OOPre博客总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -744,7 +763,7 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-10-18
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-12-17
                             </span>
                         <span class="publish-author">
                             
@@ -755,6 +774,43 @@
                     </div>
                 </div>
 
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/12/17/CPU%20%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3-P6/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="CPU 设计文档P6">
+                        
+                        <span class="card-title">CPU 设计文档P6</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-12-17
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Salan
+                            
+                        </span>
+                    </div>
+                </div>
                 
             </div>
         </div>

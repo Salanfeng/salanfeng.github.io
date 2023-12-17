@@ -1,0 +1,2704 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="CPU 设计文档P6, Salan&#39;s blog">
+    <meta name="description" content="记录学习过程~">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>CPU 设计文档P6 | Salan&#39;s blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Salan&#39;s blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Salan&#39;s blog</div>
+        <div class="logo-desc">
+            
+            记录学习过程~
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">CPU 设计文档P6</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2023-12-17
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="CPU-设计文档"><a href="#CPU-设计文档" class="headerlink" title="CPU 设计文档"></a>CPU 设计文档</h1><h2 id="设计草稿"><a href="#设计草稿" class="headerlink" title="设计草稿"></a><strong>设计草稿</strong></h2><p><img src="C:\Users\abc\Desktop\note\CO\微信图片_20231110184611.png" alt="微信图片_20231110184611"></p>
+<p><img src="C:\Users\abc\Desktop\note\CO\微信图片_20231110230553.png" alt="微信图片_20231110230553"></p>
+<table>
+<thead>
+<tr>
+<th align="left">阶段</th>
+<th align="left">简称</th>
+<th align="left">功能概述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">取指阶段（Fetch）</td>
+<td align="left">F</td>
+<td align="left">从指令存储器中读取指令</td>
+</tr>
+<tr>
+<td align="left">译码阶段（Decode）</td>
+<td align="left">D</td>
+<td align="left">从寄存器文件中读取源操作数并对指令译码以便得到控制信号</td>
+</tr>
+<tr>
+<td align="left">执行阶段（Execute）</td>
+<td align="left">E</td>
+<td align="left">使用 ALU 执行计算</td>
+</tr>
+<tr>
+<td align="left">存储阶段（Memory）</td>
+<td align="left">M</td>
+<td align="left">读或写数据存储器</td>
+</tr>
+<tr>
+<td align="left">写回阶段（Writeback）</td>
+<td align="left">W</td>
+<td align="left">将结果写回到寄存器文件</td>
+</tr>
+</tbody></table>
+<h4 id="支持指令"><a href="#支持指令" class="headerlink" title="支持指令"></a>支持指令</h4><p><img src="C:\Users\abc\Desktop\note\CO\5cc368a4c06f497398ae2f0e15efd674.png" alt="5cc368a4c06f497398ae2f0e15efd674"></p>
+<table>
+<thead>
+<tr>
+<th>指令</th>
+<th>31-26</th>
+<th>25-21</th>
+<th>20-16</th>
+<th>15-11</th>
+<th>10-6</th>
+<th>5-0</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>add</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>100000</td>
+</tr>
+<tr>
+<td>sub</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>100010</td>
+</tr>
+<tr>
+<td>and</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>100100</td>
+</tr>
+<tr>
+<td>or</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>100101</td>
+</tr>
+<tr>
+<td>slt</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>101010</td>
+</tr>
+<tr>
+<td>sltu</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>rd</td>
+<td>00000</td>
+<td>101011</td>
+</tr>
+<tr>
+<td>lui</td>
+<td>001111</td>
+<td>00000</td>
+<td>rt</td>
+<td>i</td>
+<td>m</td>
+<td>m</td>
+</tr>
+<tr>
+<td>addi</td>
+<td>001000</td>
+<td>rs</td>
+<td>rt</td>
+<td>i</td>
+<td>m</td>
+<td>m</td>
+</tr>
+<tr>
+<td>andi</td>
+<td>001100</td>
+<td>rs</td>
+<td>rt</td>
+<td>i</td>
+<td>m</td>
+<td>m</td>
+</tr>
+<tr>
+<td>ori</td>
+<td>001101</td>
+<td>rs</td>
+<td>rt</td>
+<td>i</td>
+<td>m</td>
+<td>m</td>
+</tr>
+<tr>
+<td>lb</td>
+<td>100000</td>
+<td>base</td>
+<td>rt</td>
+<td>off</td>
+<td>se</td>
+<td>t</td>
+</tr>
+<tr>
+<td>lh</td>
+<td>100001</td>
+<td>base</td>
+<td>rt</td>
+<td>off</td>
+<td>se</td>
+<td>t</td>
+</tr>
+<tr>
+<td>lw</td>
+<td>100011</td>
+<td>base</td>
+<td>rt</td>
+<td>off</td>
+<td>se</td>
+<td>t</td>
+</tr>
+<tr>
+<td>sb</td>
+<td>101000</td>
+<td>base</td>
+<td>rt</td>
+<td>off</td>
+<td>se</td>
+<td>t</td>
+</tr>
+<tr>
+<td>sh</td>
+<td>101001</td>
+<td>base</td>
+<td>rt</td>
+<td>off</td>
+<td>se</td>
+<td>t</td>
+</tr>
+<tr>
+<td>sw</td>
+<td>101011</td>
+<td>base</td>
+<td>rt</td>
+<td>off</td>
+<td>se</td>
+<td>t</td>
+</tr>
+<tr>
+<td>mult</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>00000</td>
+<td>00000</td>
+<td>011000</td>
+</tr>
+<tr>
+<td>multu</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>00000</td>
+<td>00000</td>
+<td>011001</td>
+</tr>
+<tr>
+<td>div</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>00000</td>
+<td>00000</td>
+<td>011010</td>
+</tr>
+<tr>
+<td>divu</td>
+<td>000000</td>
+<td>rs</td>
+<td>rt</td>
+<td>00000</td>
+<td>00000</td>
+<td>011011</td>
+</tr>
+<tr>
+<td>mfhi</td>
+<td>000000</td>
+<td>00000</td>
+<td>00000</td>
+<td>rd</td>
+<td>00000</td>
+<td>010000</td>
+</tr>
+<tr>
+<td>mflo</td>
+<td>000000</td>
+<td>00000</td>
+<td>00000</td>
+<td>rd</td>
+<td>00000</td>
+<td>010010</td>
+</tr>
+<tr>
+<td>mthi</td>
+<td>000000</td>
+<td>rs</td>
+<td>00000</td>
+<td>00000</td>
+<td>00000</td>
+<td>010001</td>
+</tr>
+<tr>
+<td>mtlo</td>
+<td>000000</td>
+<td>rs</td>
+<td>00000</td>
+<td>00000</td>
+<td>00000</td>
+<td>010011</td>
+</tr>
+<tr>
+<td>beq</td>
+<td>000100</td>
+<td>rs</td>
+<td>rt</td>
+<td>off</td>
+<td>se</td>
+<td>t</td>
+</tr>
+<tr>
+<td>bne</td>
+<td>000101</td>
+<td>rs</td>
+<td>rt</td>
+<td>off</td>
+<td>se</td>
+<td>t</td>
+</tr>
+<tr>
+<td>j</td>
+<td>000010</td>
+<td>in</td>
+<td>str</td>
+<td>in</td>
+<td>de</td>
+<td>x</td>
+</tr>
+<tr>
+<td>jal</td>
+<td>000011</td>
+<td>in</td>
+<td>str</td>
+<td>in</td>
+<td>de</td>
+<td>x</td>
+</tr>
+<tr>
+<td>jr</td>
+<td>000000</td>
+<td>rs</td>
+<td>00000</td>
+<td>00000</td>
+<td>000000</td>
+<td>001000</td>
+</tr>
+<tr>
+<td>sll</td>
+<td>000000</td>
+<td>00000</td>
+<td>rt</td>
+<td>sd</td>
+<td>sa</td>
+<td>000000</td>
+</tr>
+<tr>
+<td>nop</td>
+<td>000000</td>
+<td>00000</td>
+<td>00000</td>
+<td>00000</td>
+<td>00000</td>
+<td>000000</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="center">指令</th>
+<th align="center">ALUOp</th>
+<th align="center">RegDst</th>
+<th align="center">ALUSrc</th>
+<th align="center">Mem2Reg</th>
+<th align="center">RegWrite</th>
+<th align="center">Branch</th>
+<th align="center">ExtOp</th>
+<th align="center">Jump</th>
+<th>LSOp</th>
+<th>MDUOp</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">add</td>
+<td align="center">00000</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">sub</td>
+<td align="center">00001</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">and</td>
+<td align="center">00010</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">or</td>
+<td align="center">00011</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">slt</td>
+<td align="center">01001</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">sltu</td>
+<td align="center">01010</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">lui</td>
+<td align="center">00110</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">addi</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">andi</td>
+<td align="center">00010</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">ori</td>
+<td align="center">00011</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">lb</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">lh</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">lw</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">sb</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">sh</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">sw</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">mult</td>
+<td align="center">00000</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td align="center">multu</td>
+<td align="center">00000</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td>2</td>
+</tr>
+<tr>
+<td align="center">div</td>
+<td align="center">00000</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td>3</td>
+</tr>
+<tr>
+<td align="center">divu</td>
+<td align="center">00000</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td>4</td>
+</tr>
+<tr>
+<td align="center">mfhi</td>
+<td align="center">00000</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td>5</td>
+</tr>
+<tr>
+<td align="center">mflo</td>
+<td align="center">00000</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td>6</td>
+</tr>
+<tr>
+<td align="center">mthi</td>
+<td align="center">00000</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td>7</td>
+</tr>
+<tr>
+<td align="center">mtlo</td>
+<td align="center">00000</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td>8</td>
+</tr>
+<tr>
+<td align="center">beq</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">bne</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">2</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">j</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">jal</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">jr</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">sll</td>
+<td align="center">00110</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">nop</td>
+<td align="center">00000</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td>0</td>
+<td></td>
+</tr>
+</tbody></table>
+<p>ps：装不下了，特殊信号放外面：Link只有jal，Jr只有jr，Branch有beq，bne，MemWrite有sw，sb，sh</p>
+<h4 id="定义模块"><a href="#定义模块" class="headerlink" title="定义模块"></a>定义模块</h4><h5 id="CU"><a href="#CU" class="headerlink" title="CU:"></a>CU:</h5><table>
+<thead>
+<tr>
+<th align="center">信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">OP</td>
+<td>I</td>
+<td>6</td>
+<td>OP_code</td>
+</tr>
+<tr>
+<td align="center">Funct</td>
+<td>I</td>
+<td>6</td>
+<td>R指令Func</td>
+</tr>
+<tr>
+<td align="center">RegDst</td>
+<td>O</td>
+<td>1</td>
+<td>1则GRF写入数据地址为rd，R型选</td>
+</tr>
+<tr>
+<td align="center">ALUSrc</td>
+<td>O</td>
+<td>1</td>
+<td>1则ALU_B选择imm，shift选16，I型选；<br />0则ALU_B选NumB，shift选shamt</td>
+</tr>
+<tr>
+<td align="center">MemtoReg</td>
+<td>O</td>
+<td>1</td>
+<td>1则RegData为DM输出，0则为ALU_out</td>
+</tr>
+<tr>
+<td align="center">RegWritre</td>
+<td>O</td>
+<td>1</td>
+<td>1则GRF可写入</td>
+</tr>
+<tr>
+<td align="center">MemWrite</td>
+<td>O</td>
+<td>1</td>
+<td>1则DM可写入</td>
+</tr>
+<tr>
+<td align="center">Branch</td>
+<td>O</td>
+<td>1</td>
+<td>1则指令为Branch</td>
+</tr>
+<tr>
+<td align="center">ExtOp</td>
+<td>O</td>
+<td>1</td>
+<td>1则Ext为符号扩展，与addr+offset相关</td>
+</tr>
+<tr>
+<td align="center">Jump</td>
+<td>O</td>
+<td>1</td>
+<td>1则指令为J型</td>
+</tr>
+<tr>
+<td align="center">Link</td>
+<td>O</td>
+<td>1</td>
+<td>1则存PC+4到$ra</td>
+</tr>
+<tr>
+<td align="center">Jr</td>
+<td>O</td>
+<td>1</td>
+<td>1则PC为ra</td>
+</tr>
+<tr>
+<td align="center">Tuse_rs</td>
+<td>O</td>
+<td>4</td>
+<td>指令再过几周期要用rs</td>
+</tr>
+<tr>
+<td align="center">Tuse_rt</td>
+<td>O</td>
+<td>4</td>
+<td>指令再过几周期要用rt</td>
+</tr>
+<tr>
+<td align="center">Tnew</td>
+<td>O</td>
+<td>4</td>
+<td>指令再过几周期写入WD</td>
+</tr>
+<tr>
+<td align="center">ALUOp</td>
+<td>O</td>
+<td>4</td>
+<td>见ALU</td>
+</tr>
+<tr>
+<td align="center">LSOp</td>
+<td>O</td>
+<td>2</td>
+<td>0为Lw&#x2F;Sw，1为Lh&#x2F;Sh，2为Lb&#x2F;Sb</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Tuse：ID 级，其后的某个功能部件再经过多少时钟周期就要使用寄存器值。</li>
+<li>Tnew：再经过多少周期就能够产生要写入寄存器的结果。</li>
+</ul>
+<p><strong>Tuse表</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">指令类型</th>
+<th align="left">Tuse_rs</th>
+<th align="left">Tuse_rt</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">calc_R</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">calc_I</td>
+<td align="left">1</td>
+<td align="left">X</td>
+</tr>
+<tr>
+<td align="left">shift</td>
+<td align="left">X</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">shiftv</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">load</td>
+<td align="left">1</td>
+<td align="left">X</td>
+</tr>
+<tr>
+<td align="left">store</td>
+<td align="left">1</td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">branch</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">jump</td>
+<td align="left">X</td>
+<td align="left">X</td>
+</tr>
+<tr>
+<td align="left">jr</td>
+<td align="left">0</td>
+<td align="left">X</td>
+</tr>
+</tbody></table>
+<p><strong>Tnew表</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">指令类型</th>
+<th align="left">Tnew_D</th>
+<th align="left">Tnew_E</th>
+<th align="left">Tnew_M</th>
+<th align="left">Tnew_W</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">calc_R</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">calc_I</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">load</td>
+<td align="left">3</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">store</td>
+<td align="left">X</td>
+<td align="left">X</td>
+<td align="left">X</td>
+<td align="left">X</td>
+</tr>
+<tr>
+<td align="left">branch</td>
+<td align="left">X</td>
+<td align="left">X</td>
+<td align="left">X</td>
+<td align="left">X</td>
+</tr>
+<tr>
+<td align="left">jal</td>
+<td align="left">2</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">0</td>
+</tr>
+<tr>
+<td align="left">jr</td>
+<td align="left">X</td>
+<td align="left">X</td>
+<td align="left">X</td>
+<td align="left">X</td>
+</tr>
+</tbody></table>
+<h5 id="IFU"><a href="#IFU" class="headerlink" title="IFU:"></a>IFU:</h5><table>
+<thead>
+<tr>
+<th align="center">信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">CLK</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td align="center">Reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号</td>
+</tr>
+<tr>
+<td align="center">PC</td>
+<td>I</td>
+<td>32</td>
+<td>下一条要被执行的指令的地址</td>
+</tr>
+<tr>
+<td align="center">Now_PC</td>
+<td>O</td>
+<td>32</td>
+<td>输出当前正在执行的指令的地址</td>
+</tr>
+<tr>
+<td align="center">Instr</td>
+<td>O</td>
+<td>32</td>
+<td>输出当前正在执行的指令</td>
+</tr>
+</tbody></table>
+<h5 id="ALU"><a href="#ALU" class="headerlink" title="ALU:"></a>ALU:</h5><table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ALUOp</td>
+<td>I</td>
+<td>4</td>
+<td>ALU功能选择信号</td>
+</tr>
+<tr>
+<td>A</td>
+<td>I</td>
+<td>32</td>
+<td>参与ALU计算的第一个值</td>
+</tr>
+<tr>
+<td>B</td>
+<td>I</td>
+<td>32</td>
+<td>参与ALU计算的第二个值</td>
+</tr>
+<tr>
+<td>Shift</td>
+<td>I</td>
+<td>5</td>
+<td>移位数输入</td>
+</tr>
+<tr>
+<td>Equal</td>
+<td>O</td>
+<td>1</td>
+<td>相等判断信号  1则相等</td>
+</tr>
+<tr>
+<td>ALU_Result</td>
+<td>O</td>
+<td>32</td>
+<td>输出ALU计算结果</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>功能名称</th>
+<th>ALU_Op</th>
+<th>功能描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>加</td>
+<td>0b0000</td>
+<td>ALU_Result &#x3D; A+ B</td>
+</tr>
+<tr>
+<td>1</td>
+<td>减</td>
+<td>0b0001</td>
+<td>ALU_Result &#x3D; A- B</td>
+</tr>
+<tr>
+<td>2</td>
+<td>按位与</td>
+<td>0b0010</td>
+<td>ALU_Result &#x3D; A&amp; B</td>
+</tr>
+<tr>
+<td>3</td>
+<td>按位或</td>
+<td>0b0011</td>
+<td>ALU_Result &#x3D; A|B</td>
+</tr>
+<tr>
+<td>4</td>
+<td>乘法</td>
+<td>0b0100</td>
+<td>ALU_Result &#x3D; A*B</td>
+</tr>
+<tr>
+<td>5</td>
+<td>除法</td>
+<td>0b0101</td>
+<td>ALU_Result &#x3D; A&#x2F;B</td>
+</tr>
+<tr>
+<td>6</td>
+<td>逻辑左移</td>
+<td>0b0110</td>
+<td>ALU_Result &#x3D; B &lt;&lt; Shift</td>
+</tr>
+<tr>
+<td>7</td>
+<td>逻辑右移</td>
+<td>0b0111</td>
+<td>ALU_Result &#x3D; B &gt;&gt; Shift</td>
+</tr>
+<tr>
+<td>8</td>
+<td>算术右移</td>
+<td>0b1000</td>
+<td>ALU_Result &#x3D; B &gt;&gt;&gt; Shift</td>
+</tr>
+<tr>
+<td>9</td>
+<td>带符号比较</td>
+<td>0b1001</td>
+<td>ALU_Result &#x3D; (A&lt; B) ? 1 : 0（带符号比较）</td>
+</tr>
+<tr>
+<td>10</td>
+<td>无符号比较</td>
+<td>0b1010</td>
+<td>ALU_Result &#x3D; (A&lt; B) ? 1 : 0（无符号比较）</td>
+</tr>
+</tbody></table>
+<h5 id="MDU"><a href="#MDU" class="headerlink" title="MDU:"></a>MDU:</h5><table>
+<thead>
+<tr>
+<th align="left">信号名</th>
+<th align="left">方向</th>
+<th align="left">位宽</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">clk</td>
+<td align="left">I</td>
+<td align="left">1</td>
+<td align="left">时钟信号</td>
+</tr>
+<tr>
+<td align="left">reset</td>
+<td align="left">I</td>
+<td align="left">1</td>
+<td align="left">复位信号</td>
+</tr>
+<tr>
+<td align="left">start</td>
+<td align="left">I</td>
+<td align="left">1</td>
+<td align="left">乘除运算启动信号</td>
+</tr>
+<tr>
+<td align="left">MDUOp</td>
+<td align="left">I</td>
+<td align="left">4</td>
+<td align="left">乘除模块功能选择 0x0000：空指令<br /> 0x0001：mult指令 0x0010：multu指令 0x0011：div指令 0x0100：divu指令 0x0101：mfhi指令 0x0110：mflo指令 0x0111：mthi指令 0x1000：mtlo指令</td>
+</tr>
+<tr>
+<td align="left">A</td>
+<td align="left">I</td>
+<td align="left">32</td>
+<td align="left">运算数据</td>
+</tr>
+<tr>
+<td align="left">B</td>
+<td align="left">I</td>
+<td align="left">32</td>
+<td align="left">运算数据</td>
+</tr>
+<tr>
+<td align="left">HI</td>
+<td align="left">O</td>
+<td align="left">32</td>
+<td align="left">HI寄存器输出值</td>
+</tr>
+<tr>
+<td align="left">LO</td>
+<td align="left">O</td>
+<td align="left">32</td>
+<td align="left">LO寄存器输出值</td>
+</tr>
+<tr>
+<td align="left">out</td>
+<td align="left">O</td>
+<td align="left">32</td>
+<td align="left">MDU输出值（HI、LO中选择）</td>
+</tr>
+<tr>
+<td align="left">busy</td>
+<td align="left">O</td>
+<td align="left">1</td>
+<td align="left">乘除运算进行信号</td>
+</tr>
+</tbody></table>
+<h5 id="GRF"><a href="#GRF" class="headerlink" title="GRF:"></a>GRF:</h5><table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CLK</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>Reset</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号</td>
+</tr>
+<tr>
+<td>A1</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD1</td>
+</tr>
+<tr>
+<td>A2</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其中的数据读出到RD2</td>
+</tr>
+<tr>
+<td>A3</td>
+<td>I</td>
+<td>5</td>
+<td>地址输入信号，指定32个寄存器中的一个，将其作为写入目标</td>
+</tr>
+<tr>
+<td>WD</td>
+<td>I</td>
+<td>32</td>
+<td>数据输入信号</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号</td>
+</tr>
+<tr>
+<td>RD1</td>
+<td>O</td>
+<td>32</td>
+<td>输出A1指定的寄存器中的32位数据</td>
+</tr>
+<tr>
+<td>RD2</td>
+<td>O</td>
+<td>32</td>
+<td>输出A2指定的寄存器中的32位数据</td>
+</tr>
+</tbody></table>
+<h5 id="NPC"><a href="#NPC" class="headerlink" title="NPC:"></a>NPC:</h5><table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PC</td>
+<td>I</td>
+<td>32</td>
+<td>当前指令地址</td>
+</tr>
+<tr>
+<td>offset</td>
+<td>I</td>
+<td>32</td>
+<td>地址偏移量，用于计算B类指令所要跳转的地址</td>
+</tr>
+<tr>
+<td>instr_addr</td>
+<td>I</td>
+<td>26</td>
+<td>当前指令数据的前26位（0~25），用于计算jal和j指令所要跳转的地址</td>
+</tr>
+<tr>
+<td>ra</td>
+<td>I</td>
+<td>32</td>
+<td>储存在寄存器（$ra或是jalr指令中存储“PC+4”的寄存器）中的地址数据，用于实现jr和jalr指令</td>
+</tr>
+<tr>
+<td>Branch</td>
+<td>I</td>
+<td>1</td>
+<td>B类指令选择信号，1为True</td>
+</tr>
+<tr>
+<td>Equal</td>
+<td>I</td>
+<td>1</td>
+<td>判断A，B是否相等</td>
+</tr>
+<tr>
+<td>Jr</td>
+<td>I</td>
+<td>1</td>
+<td>输入“JR”控制信号，1为True</td>
+</tr>
+<tr>
+<td>Jump</td>
+<td>I</td>
+<td>1</td>
+<td>输入“JUMP”控制信号，1为True</td>
+</tr>
+<tr>
+<td>next_PC</td>
+<td>O</td>
+<td>32</td>
+<td>输出下一指令地址</td>
+</tr>
+<tr>
+<td>PC_plus4</td>
+<td>O</td>
+<td>32</td>
+<td>输出PC+4的值，用于实现jal指令中的地址存储</td>
+</tr>
+</tbody></table>
+<h5 id="SaveByte"><a href="#SaveByte" class="headerlink" title="SaveByte:"></a>SaveByte:</h5><table>
+<thead>
+<tr>
+<th align="left">信号名</th>
+<th align="left">方向</th>
+<th align="left">位宽</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">addr</td>
+<td align="left">I</td>
+<td align="left">2</td>
+<td align="left">DM写入地址的低2位</td>
+</tr>
+<tr>
+<td align="left">LSOp</td>
+<td align="left">I</td>
+<td align="left">2</td>
+<td align="left">访存功能信号</td>
+</tr>
+<tr>
+<td align="left">WD_in</td>
+<td align="left">I</td>
+<td align="left">32</td>
+<td align="left">未经处理的DM写入数据</td>
+</tr>
+<tr>
+<td align="left">byteen</td>
+<td align="left">O</td>
+<td align="left">4</td>
+<td align="left">字节使能信号</td>
+</tr>
+<tr>
+<td align="left">WD_out</td>
+<td align="left">O</td>
+<td align="left">32</td>
+<td align="left">处理后的DM写入数据</td>
+</tr>
+</tbody></table>
+<h5 id="LoadByte"><a href="#LoadByte" class="headerlink" title="LoadByte:"></a>LoadByte:</h5><table>
+<thead>
+<tr>
+<th align="left">信号名</th>
+<th align="left">方向</th>
+<th align="left">位宽</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">addr</td>
+<td align="left">I</td>
+<td align="left">2</td>
+<td align="left">DM写入地址的低2位</td>
+</tr>
+<tr>
+<td align="left">LSOp</td>
+<td align="left">I</td>
+<td align="left">2</td>
+<td align="left">访存功能信号</td>
+</tr>
+<tr>
+<td align="left">WD_in</td>
+<td align="left">I</td>
+<td align="left">32</td>
+<td align="left">未经处理的DM写入数据</td>
+</tr>
+<tr>
+<td align="left">WD_out</td>
+<td align="left">O</td>
+<td align="left">32</td>
+<td align="left">处理后的DM写入数据</td>
+</tr>
+</tbody></table>
+<h5 id="DM"><a href="#DM" class="headerlink" title="DM:"></a>DM:</h5><table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>addr</td>
+<td>I</td>
+<td>1</td>
+<td>时钟信号</td>
+</tr>
+<tr>
+<td>LSOp</td>
+<td>I</td>
+<td>1</td>
+<td>异步复位信号</td>
+</tr>
+<tr>
+<td>WD_in</td>
+<td>I</td>
+<td>32</td>
+<td>地址输入信号，指向数据储存器中某个存储单元</td>
+</tr>
+<tr>
+<td>byteen</td>
+<td>I</td>
+<td>32</td>
+<td>数据输入信号</td>
+</tr>
+<tr>
+<td>WE</td>
+<td>I</td>
+<td>1</td>
+<td>写使能信号</td>
+</tr>
+<tr>
+<td>RD</td>
+<td>O</td>
+<td>32</td>
+<td>输出A指定的存储单元中的32位数据</td>
+</tr>
+</tbody></table>
+<h5 id="HCTRL"><a href="#HCTRL" class="headerlink" title="HCTRL:"></a>HCTRL:</h5><table>
+<thead>
+<tr>
+<th>信号名</th>
+<th>方向</th>
+<th>位宽</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ID和EX级的Rs、Rt</td>
+<td>I</td>
+<td>5</td>
+<td>需求者需要的地址</td>
+</tr>
+<tr>
+<td>EX、MEM、WB级的WA</td>
+<td>I</td>
+<td>5</td>
+<td>转发者写入的地址</td>
+</tr>
+<tr>
+<td>EX、MEM、WB级的RegWrite</td>
+<td>I</td>
+<td>1</td>
+<td>是否写入</td>
+</tr>
+<tr>
+<td>Tuse_rs&#x2F;rt</td>
+<td>I</td>
+<td>4</td>
+<td>tuse</td>
+</tr>
+<tr>
+<td>EX、MEM、WB级的Tnew</td>
+<td>I</td>
+<td>4</td>
+<td>tnew</td>
+</tr>
+<tr>
+<td>npc_stall\IF_stall\ID_clr</td>
+<td>O</td>
+<td>1</td>
+<td>暂停</td>
+</tr>
+<tr>
+<td>FowardAE\BE\AD\BD</td>
+<td>O</td>
+<td>2</td>
+<td>转发信号</td>
+</tr>
+</tbody></table>
+<h2 id="测试方案"><a href="#测试方案" class="headerlink" title="测试方案"></a><strong>测试方案</strong></h2><p>利用python编写测试代码。随机生成合法的代码，自动生成机器码，通过学长的魔改Mars运行生成正确输出，并与XILINX ISE仿真生成的输出进行比对，自动判定正误，也可与同学对拍。</p>
+<h6 id="自动测试-参考了学长的代码-："><a href="#自动测试-参考了学长的代码-：" class="headerlink" title="自动测试(参考了学长的代码)："></a>自动测试(参考了学长的代码)：</h6><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line">rootPath = <span class="string">&quot;C:\\Users\\abc\\Desktop\\cpu\\src&quot;</span></span><br><span class="line">runTime = <span class="string">&quot;200us&quot;</span></span><br><span class="line">ISEPath = <span class="string">&quot;D:\\000\\ISE\\14.7\\ISE_DS\\ISE&quot;</span></span><br><span class="line">error = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">runMars</span>():</span><br><span class="line">    os.system(<span class="string">&quot;java -jar mars.jar mc CompactDataAtZero a dump .text HexText code.txt nc mips_code.asm&quot;</span>)</span><br><span class="line">    os.system(<span class="string">&quot;java -jar mars.jar mc CompactDataAtZero nc ig db coL1  mips_code.asm &gt; mips_out.txt&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">runISE</span>():</span><br><span class="line">    file_list = []</span><br><span class="line">    <span class="keyword">for</span> i, j ,k <span class="keyword">in</span> os.walk(rootPath):</span><br><span class="line">        <span class="keyword">for</span> file <span class="keyword">in</span> k:</span><br><span class="line">            <span class="keyword">if</span> file.endswith(<span class="string">&quot;.v&quot;</span>):</span><br><span class="line">                file_list.append(file)</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(rootPath + <span class="string">&quot;\\mips.prj&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> prj:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(file_list)):</span><br><span class="line">            prj.write(<span class="string">&quot;Verilog work \&quot;&quot;</span> + rootPath + <span class="string">&quot;\\&quot;</span> + file_list[i] + <span class="string">&quot;\&quot;\n&quot;</span>)           </span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(rootPath + <span class="string">&quot;\mips.tcl&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> tcl:</span><br><span class="line">        tcl.write(<span class="string">&quot;run &quot;</span> + runTime +<span class="string">&quot;;\nexit&quot;</span>)</span><br><span class="line">    prj.close()</span><br><span class="line">    tcl.close()</span><br><span class="line">    os.environ[<span class="string">&quot;XILINX&quot;</span>] = ISEPath</span><br><span class="line">    os.system(ISEPath + <span class="string">&quot;\\bin\\nt64\\fuse -nodebug -prj &quot;</span> + rootPath + <span class="string">&quot;\\mips.prj -o mips.exe mips_tb &gt; compile_log.txt&quot;</span>)</span><br><span class="line">    os.system(<span class="string">&quot;mips.exe -nolog -tclbatch &quot;</span> + rootPath + <span class="string">&quot;\\mips.tcl&gt; verilog_out.txt&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">loadCode</span>():</span><br><span class="line">    <span class="built_in">list</span> = []</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;code.txt&quot;</span>, <span class="string">&quot;r+&quot;</span>) <span class="keyword">as</span> hexCode:</span><br><span class="line">        <span class="built_in">list</span> = hexCode.readlines()</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(rootPath + <span class="string">&quot;\\code.txt&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> CODE:</span><br><span class="line">        CODE.writelines(<span class="built_in">list</span>)</span><br><span class="line">    hexCode.close()</span><br><span class="line">    CODE.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">check</span>(<span class="params">test_order</span>):</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;mips_out.txt&quot;</span>, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> out_1:</span><br><span class="line">        out_std = out_1.readlines()</span><br><span class="line">        out_std.remove(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line">        out_std = [i.strip() <span class="keyword">for</span> i <span class="keyword">in</span> out_std]</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;verilog_out.txt&quot;</span>, <span class="string">&quot;r+&quot;</span>) <span class="keyword">as</span> out_2:</span><br><span class="line">        out_test = out_2.readlines()[<span class="number">10</span>:]</span><br><span class="line">        out_test = [i.strip() <span class="keyword">for</span> i <span class="keyword">in</span> out_test]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(out_test)):</span><br><span class="line">            <span class="keyword">if</span>(out_test[i].find(<span class="string">&quot;@&quot;</span>) != -<span class="number">1</span>):</span><br><span class="line">                out_test[i] = out_test[i][out_test[i].find(<span class="string">&quot;@&quot;</span>):]</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;verilog_out.txt&quot;</span>, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> out_2:</span><br><span class="line">        out_2.write(<span class="string">&quot;\n&quot;</span>.join(out_test))</span><br><span class="line">    <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;.\\check.log&quot;</span>.<span class="built_in">format</span>(test_order), <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> log:</span><br><span class="line">        flag = <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="built_in">len</span>(out_std) &gt; <span class="built_in">len</span>(out_test)):</span><br><span class="line">            flag = <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="built_in">len</span>(out_std)):</span><br><span class="line">                <span class="keyword">if</span>(out_std[i] != out_test[i]):</span><br><span class="line">                    flag = <span class="number">1</span></span><br><span class="line">                    log.write(<span class="string">&quot;error in line &#123;&#125;\n expected output is \n&#123;&#125;\nyour outout is \n&#123;&#125;\n\n\n&quot;</span>.<span class="built_in">format</span>(i, out_std[i], out_test[i]))</span><br><span class="line">        <span class="keyword">if</span>(flag):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Wrong Answer!&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Accepted!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    testNum = <span class="built_in">int</span>(<span class="built_in">input</span>())</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(testNum):</span><br><span class="line">        os.system(<span class="string">&quot;python C:\\Users\\abc\\Desktop\\cpu\\autotest\\generateCode.py&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;&#123;&#125;/&#123;&#125;&quot;</span>.<span class="built_in">format</span>(i+<span class="number">1</span>, testNum))</span><br><span class="line">        runMars()</span><br><span class="line">        loadCode()</span><br><span class="line">        runISE()</span><br><span class="line">    check(i+<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="思考题"><a href="#思考题" class="headerlink" title="思考题"></a><strong>思考题</strong></h2><h5 id="一、为什么需要有单独的乘除法部件而不是整合进-ALU？为何需要有独立的-HI、LO-寄存器？"><a href="#一、为什么需要有单独的乘除法部件而不是整合进-ALU？为何需要有独立的-HI、LO-寄存器？" class="headerlink" title="一、为什么需要有单独的乘除法部件而不是整合进 ALU？为何需要有独立的 HI、LO 寄存器？"></a>一、为什么需要有单独的乘除法部件而不是整合进 ALU？为何需要有独立的 HI、LO 寄存器？</h5><p>增加并行度。因乘除法耗时大，若整合进 ALU会导致其他指令必须等待，若独立，其他无关指令可继续执行。</p>
+<h5 id="二、真实的流水线-CPU-是如何使用实现乘除法的？请查阅相关资料进行简单说明。"><a href="#二、真实的流水线-CPU-是如何使用实现乘除法的？请查阅相关资料进行简单说明。" class="headerlink" title="二、真实的流水线 CPU 是如何使用实现乘除法的？请查阅相关资料进行简单说明。"></a>二、真实的流水线 CPU 是如何使用实现乘除法的？请查阅相关资料进行简单说明。</h5><p>EX级，根据指令类型，CPU会选择相应功能单元计算，乘除法可用简单的加减法＋移位等方式实现。进一步说，乘法器通常使用 Booth 算法或 Wallace 树算法实现，而除法器通常使用 SRT 算法或 Newton-Raphson 算法实现。这些算</p>
+<h5 id="三、请结合自己的实现分析，你是如何处理-Busy-信号带来的周期阻塞的？"><a href="#三、请结合自己的实现分析，你是如何处理-Busy-信号带来的周期阻塞的？" class="headerlink" title="三、请结合自己的实现分析，你是如何处理 Busy 信号带来的周期阻塞的？"></a>三、请结合自己的实现分析，你是如何处理 Busy 信号带来的周期阻塞的？</h5><p>对于无关指令，即不涉及HI、LO寄存器的指令，继续流水，当EX级指令为乘除法或读写HI、LO寄存器时，busy置1，EX级及以前的指令阻塞，PC阻塞。</p>
+<h5 id="四、请问采用字节使能信号的方式处理写指令有什么好处？"><a href="#四、请问采用字节使能信号的方式处理写指令有什么好处？" class="headerlink" title="四、请问采用字节使能信号的方式处理写指令有什么好处？"></a>四、请问采用字节使能信号的方式处理写指令有什么好处？</h5><p> 允许按字节选择性地写入数据，更加清晰。字节使能信号提供了一种一致的机制，允许以相同的方式处理不同位置的数据写入。</p>
+<h5 id="五、请思考，我们在按字节读和按字节写时，实际从-DM-获得的数据和向-DM-写入的数据是否是一字节？在什么情况下我们按字节读和按字节写的效率会高于按字读和按字写呢？"><a href="#五、请思考，我们在按字节读和按字节写时，实际从-DM-获得的数据和向-DM-写入的数据是否是一字节？在什么情况下我们按字节读和按字节写的效率会高于按字读和按字写呢？" class="headerlink" title="五、请思考，我们在按字节读和按字节写时，实际从 DM 获得的数据和向 DM 写入的数据是否是一字节？在什么情况下我们按字节读和按字节写的效率会高于按字读和按字写呢？"></a>五、请思考，我们在按字节读和按字节写时，实际从 DM 获得的数据和向 DM 写入的数据是否是一字节？在什么情况下我们按字节读和按字节写的效率会高于按字读和按字写呢？</h5><p>实际从DM获得的数据和向DM写入的数据通常是按照数据总线宽度进行传输，而不是严格一字节。按字节读和按字节写的效率在以下情况下可能更高：</p>
+<ul>
+<li>当只需要特定字节的数据而不是整个字或字组时。</li>
+<li>当系统硬件支持按字节读写的机制，并且这种方式与按字读写相比没有性能损失。</li>
+</ul>
+<h5 id="六、为了对抗复杂性你采取了哪些抽象和规范手段？这些手段在译码和处理数据冲突的时候有什么样的特点与帮助？"><a href="#六、为了对抗复杂性你采取了哪些抽象和规范手段？这些手段在译码和处理数据冲突的时候有什么样的特点与帮助？" class="headerlink" title="六、为了对抗复杂性你采取了哪些抽象和规范手段？这些手段在译码和处理数据冲突的时候有什么样的特点与帮助？"></a>六、为了对抗复杂性你采取了哪些抽象和规范手段？这些手段在译码和处理数据冲突的时候有什么样的特点与帮助？</h5><p>将相似的功能信号抽象成Op编码，减少流水寄存器接口数和功能组件的端口。</p>
+<p>将cu中同类型指令抽象成一类，具体按照R、I、J型以及Tuse、Tnew划分，简化译码过程，方便新增指令。</p>
+<h5 id="七、在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？"><a href="#七、在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？" class="headerlink" title="七、在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？"></a>七、在本实验中你遇到了哪些不同指令类型组合产生的冲突？你又是如何解决的？相应的测试样例是什么样的？</h5><p>乘除指令、mfhi、mflo之间的冲突，load型与乘除指令的冲突。前者用busy阻塞，后者沿用之前的转发路径。</p>
+<figure class="highlight verilog"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#<span class="number">1</span></span><br><span class="line">mult $t2,$t3</span><br><span class="line">mfhi $t1</span><br><span class="line">#<span class="number">2</span></span><br><span class="line">lh $t1,<span class="number">0</span></span><br><span class="line">mult $t1,$t1</span><br></pre></td></tr></table></figure>
+
+
+
+<h5 id="八、如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证覆盖了所有需要测试的情况；如果你是完全随机生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了特殊的策略，比如构造连续数据冒险序列，请你描述一下你使用的策略如何结合了随机性达到强测的效果。"><a href="#八、如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证覆盖了所有需要测试的情况；如果你是完全随机生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了特殊的策略，比如构造连续数据冒险序列，请你描述一下你使用的策略如何结合了随机性达到强测的效果。" class="headerlink" title="八、如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证覆盖了所有需要测试的情况；如果你是完全随机生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了特殊的策略，比如构造连续数据冒险序列，请你描述一下你使用的策略如何结合了随机性达到强测的效果。"></a>八、如果你是手动构造的样例，请说明构造策略，说明你的测试程序如何保证<strong>覆盖</strong>了所有需要测试的情况；如果你是<strong>完全随机</strong>生成的测试样例，请思考完全随机的测试程序有何不足之处；如果你在生成测试样例时采用了<strong>特殊的策略</strong>，比如构造连续数据冒险序列，请你描述一下你使用的策略如何<strong>结合了随机性</strong>达到强测的效果。</h5><p>随机生成的测试样例，跳转指令容易生成死循环；延迟槽可能产生跳转指令导致bug，增加判断修复；除法可能除0，mdu中增加特判修复。</p>
+<p>使随机生成的寄存器编号范围减小，更容易产生冲突冒险。</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Salan</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://salanfeng.github.io/2023/12/17/CPU%20%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3-P6/">https://salanfeng.github.io/2023/12/17/CPU%20%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3-P6/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Salan</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2023/12/17/OOPre%E5%8D%9A%E5%AE%A2%E6%80%BB%E7%BB%93/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="OOPre博客总结">
+                        
+                        <span class="card-title">OOPre博客总结</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-12-17
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Salan
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/12/17/CPU%20%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3-P5/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="CPU 设计文档P5">
+                        
+                        <span class="card-title">CPU 设计文档P5</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-12-17
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            Salan
+                            
+                        </span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2023</span>
+            
+            <span id="year">2023</span>
+            <a href="/about" target="_blank">Salan</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/Salanfeng" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:2309411165@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2309411165" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2309411165" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+	
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

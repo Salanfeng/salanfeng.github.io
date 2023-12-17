@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Hello World, Salan&#39;s blog">
+    <meta name="keywords" content="如何在服务器使用docker运行NVIDIA HPC-Benchmarks？, Salan&#39;s blog">
     <meta name="description" content="记录学习过程~">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Hello World | Salan&#39;s blog</title>
+    <title>如何在服务器使用docker运行NVIDIA HPC-Benchmarks？ | Salan&#39;s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -288,12 +288,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Hello World</h1>
+                    <h1 class="description center-align post-title">如何在服务器使用docker运行NVIDIA HPC-Benchmarks？</h1>
                 </div>
             </div>
         </div>
@@ -421,7 +421,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-10-18
+                    2023-12-10
                 </div>
                 
 
@@ -442,19 +442,92 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+                <h2 id="如何在服务器使用docker运行NVIDIA-HPC-Benchmarks？"><a href="#如何在服务器使用docker运行NVIDIA-HPC-Benchmarks？" class="headerlink" title="如何在服务器使用docker运行NVIDIA HPC-Benchmarks？"></a>如何在服务器使用docker运行NVIDIA HPC-Benchmarks？</h2><p>先以21.4-hpl举例，如何用gpu运行hpl</p>
+<hr>
+<h4 id="一、环境准备"><a href="#一、环境准备" class="headerlink" title="一、环境准备"></a>一、环境准备</h4><ul>
+<li><h5 id="环境检查：确保服务器上有docker且你有使用权限，确保服务器有显卡驱动"><a href="#环境检查：确保服务器上有docker且你有使用权限，确保服务器有显卡驱动" class="headerlink" title="环境检查：确保服务器上有docker且你有使用权限，确保服务器有显卡驱动"></a>环境检查：确保服务器上有docker且你有使用权限，确保服务器有显卡驱动</h5></li>
+</ul>
+<p>虽然docker已经集成了nvidia-docker，但是要用GPU得下载NVIDIA的容器，先用<code>nvidia-container-cli -V</code>检查有没有装，没出现版本信息就是没装。运行下面的命令或在<a target="_blank" rel="noopener" href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html#installing-the-nvidia-container-toolkit">Installing the NVIDIA Container Toolkit</a> 进入官方教程下载nvidia容器。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo curl -s -L https://nvidia.github.io/nvidia-container-runtime/gpgkey | \</span><br><span class="line">  sudo apt-key add -</span><br><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID)</span><br><span class="line">su</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<ul>
+<li><h5 id="注册NGC，之后拉取镜像需要"><a href="#注册NGC，之后拉取镜像需要" class="headerlink" title="注册NGC，之后拉取镜像需要"></a>注册<a target="_blank" rel="noopener" href="https://catalog.ngc.nvidia.com/">NGC</a>，之后拉取镜像需要</h5></li>
+<li><h5 id="拉取docker镜像"><a href="#拉取docker镜像" class="headerlink" title="拉取docker镜像"></a>拉取docker镜像</h5></li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://catalog.ngc.nvidia.com/orgs/nvidia/containers/hpc-benchmarks">NVIDIA HPC-Benchmarks | NVIDIA NGC</a>为NVIDIA的HPC-Benchmarks官方教程，可自行参考（不见得好使）。在此网站<code>Tags</code>下，有各种版本的镜像。由于gpu8版本cuda版本太老，23.3以上的版本跑不了（需cuda&gt;12.0），笔者只运行了21.4及以下版本的镜像。目前老版本的不同测试项目是分开的（hpl,hpcg），所以按需求选择下载即可（全下了也ok）。</p>
+<p>可用<code>docker images</code>查看你需要的镜像文件是否已经下载了</p>
+<p>下载镜像命令如下，其中最后的nvcr.io&#x2F;***就是<code>Tags</code>下镜像右边的url</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker pull nvcr.io/nvidia/hpc-benchmarks:23.10</span></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>等一会就下载好了</p>
+<ul>
+<li><h5 id="运行docker"><a href="#运行docker" class="headerlink" title="运行docker"></a>运行docker</h5></li>
+</ul>
+<p>首先，找到刚刚下的镜像</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker images</span></span><br><span class="line">REPOSITORY                      TAG         IMAGE ID       CREATED        SIZE</span><br><span class="line">nvcr.io/nvidia/hpc-benchmarks   23.10       8e06e550b60e   6 weeks ago    7.43GB</span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">nvidia-docker run -it 8e06e550b60e bash</span></span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">ps:8e06e550b60e是你要启动的镜像的IMAGE ID,-it保证能与容器交互且CLi能工作</span></span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>进入docker</p>
+<p><strong>ps:gpu8（28核cpu，2个P100，cuda版本不够）只能跑21.4以下的镜像，故我将以21.4-hpl为演示</strong></p>
+<hr>
+<h4 id="二、配置参数"><a href="#二、配置参数" class="headerlink" title="二、配置参数"></a>二、配置参数</h4><p>进入21.4-hpl镜像后，在<code>/workspace</code>目录下。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">ls</span></span></span><br><span class="line">hpl-ai-linux-x86_64  hpl-linux-x86_64  hpl.sh  third_party.txt</span><br></pre></td></tr></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<p>比较重要的是hpl-linux-x86_64和hpl.sh</p>
+<p>其中hpl.sh是待会运行的脚本。</p>
+<p>hpl-linux-x86_64下有README  RUNNING  TUNING三个说明文件，分别对应介绍，运行参数，dat文件配置介绍。dat文件是设置hpl规模的各种参数，sample-dat文件夹下有一些dat文件样例。</p>
+<ul>
+<li><h5 id="hpl-sh配置"><a href="#hpl-sh配置" class="headerlink" title="hpl.sh配置"></a>hpl.sh配置</h5></li>
+</ul>
+<p>在<code>/workspace</code>目录下输入<code>./hpl.sh -help</code>可获取一些参考，同时RUNNING文件中也有参考</p>
+<p>其中<code>--config dgx-a100</code>因为只有一种默认设置，局限性很大，基本不用，要么在hpl.sh里加一个本机的默认，要么就<code>--cpu-affinity,--cpu-cores-per-rank,--gpu-affinity</code>全加上</p>
+<p>下面是我跑的实例，我将对每个选项进行讲解，请务必确认好，否则跑不起来~~</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">mpirun -np 2 hpl.sh --dat ./hpl-linux-x86_64/sample-dat/HPL-dgx-a100-1N.dat --cpu-affinity 0:1 --cpu-cores-per-rank 4 --gpu-affinity 0:1</span></span><br></pre></td></tr></table></figure>
+
+<p>hpl可通过srun或mpi运行，其中docker用不了srun，所以用mpi跑</p>
+<ol>
+<li><p>-np 2 </p>
+<p>即设置进程数，与你要使用的（能使用的）gpu个数一样，并会直接影响到后面的配置，例如gpu8有俩P100，进程最多就设俩</p>
+</li>
+<li><p>–dat .&#x2F;*** </p>
+<p>设置dat文件路径，dat文件配置在下文，此处虽然用的样例里的文件，但是不改是跑不了的</p>
+</li>
+<li><p>–cpu-affinity 与 –gpu-affinity。</p>
+<p>设置每个进程调的gpu和cpu，需保证gpu和cpu亲和。使用命令<code>nvidia-smi topo -m</code>可以看到如下结果，展示了GPU之间的连接方式等等。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">        GPU0    GPU1    mlx4_0  CPU Affinity    NUMA Affinity</span><br><span class="line">GPU0     X      SYS     SYS     0-13    0</span><br><span class="line">GPU1    SYS      X      PHB     14-27   1</span><br><span class="line">mlx4_0  SYS     PHB      X </span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>我们需要关注最后一列<code>NUMA Affinity</code>和下面很不对齐的数字，<code>GPU0</code>对应0，<code>GPU1</code>对应1，这就是–cpu-affinity中<strong>能够设置</strong>的与gpu亲和的对应cpu序号 </p>
+<p>需注意这俩都是根据进程数进行的切分，比如<code>-np 4</code>，那么就要写成<code>--cpu-affinity a:b:c:d</code></p>
+</li>
+<li><p>–cpu-cores-per-rank</p>
+<p>这个配置不像前三个，配错就跑不了，这个的设置跟性能有关，都可以试试，一般是设成4</p>
+</li>
+</ol>
+<ul>
+<li><h5 id="dat文件配置"><a href="#dat文件配置" class="headerlink" title="dat文件配置"></a>dat文件配置</h5></li>
+</ul>
+<p>主要参考TUNING文件和sample-dat文件夹下的样例，只讲重点</p>
+<ol>
+<li><p><strong>5、6行</strong>，5行是测试的矩阵个数，第6行则是矩阵规模，第六行设置的数字必须不小于5行的大小。第6行的设置原则是：N与运行时GPU内存占比正相关，内存消耗&#x3D;$N\times N \times 8$，设置到GPU内存占用约90%时效果较好。当设置成60000时，差不多占14.63 GB，差不多90%</p>
+</li>
+<li><p><strong>7、8行</strong>设置矩阵分块方法。第7行是指分块方法的种数，第八行是指分块的大小，根据经验，用192，288，384效果比较好，建议还是自己试</p>
+</li>
+<li><p><strong>10～12行</strong>说明二维处理器网格（P×Q）。</p>
+<p>第10行是你P与Q的组数，一般设为1，Ps，Qs各设置一个数就行了。根据网上用cpu跑的说法，**Ps × Qs＝进程数 **，这是HPL的硬性规定。且尽量P比Q小一些，一般多机可以设置P为机器数，Q为每台机器的gpu数</p>
+</li>
+<li><p>后面的可以不用修改，卷性能再说</p>
+</li>
+<li><p>下面是我针对2个P100配的dat</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">HPLinpack benchmark input file</span><br><span class="line">Innovative Computing Laboratory, University of Tennessee</span><br><span class="line">HPL.out      output file name (if any)</span><br><span class="line">6            device out (6=stdout,7=stderr,file)</span><br><span class="line">1            # of problems sizes (N)</span><br><span class="line">60000        Ns</span><br><span class="line">1            # of NBs</span><br><span class="line">288          NBs</span><br><span class="line">0            PMAP process mapping (0=Row-,1=Column-major)</span><br><span class="line">1            # of process grids (P x Q)</span><br><span class="line">1            Ps</span><br><span class="line">2            Qs</span><br><span class="line">16.0         threshold</span><br><span class="line">1            # of panel fact</span><br><span class="line">0 1 2        PFACTs (0=left, 1=Crout, 2=Right)</span><br><span class="line">1            # of recursive stopping criterium</span><br><span class="line">2 8          NBMINs (&gt;= 1)</span><br><span class="line">1            # of panels in recursion</span><br><span class="line">2            NDIVs</span><br><span class="line">1            # of recursive panel fact.</span><br><span class="line">0 1 2        RFACTs (0=left, 1=Crout, 2=Right)</span><br><span class="line">1            # of broadcast</span><br><span class="line">3 2          BCASTs (0=1rg,1=1rM,2=2rg,3=2rM,4=Lng,5=LnM)</span><br><span class="line">1            # of lookahead depth</span><br><span class="line">1 0          DEPTHs (&gt;=0)</span><br><span class="line">1            SWAP (0=bin-exch,1=long,2=mix)</span><br><span class="line">192          swapping threshold</span><br><span class="line">1            L1 in (0=transposed,1=no-transposed) form</span><br><span class="line">0            U  in (0=transposed,1=no-transposed) form</span><br><span class="line">0            Equilibration (0=no,1=yes)</span><br><span class="line">8            memory alignment in double (&gt; 0)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h4 id="三、运行"><a href="#三、运行" class="headerlink" title="三、运行"></a>三、运行</h4><p>配置好dat文件后，启动！</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ mpirun -np 2 hpl.sh --dat ./hpl-linux-x86_64/sample-dat/HPL-dgx-a100-1N.dat --cpu-affinity 0:1 --cpu-cores-per-rank 4 --gpu-affinity 0:1</span><br></pre></td></tr></table></figure>
+
+<p>可使用<code>watch -n 1 nvidia-smi</code>实时查看gpu情况</p>
+<hr>
+<ul>
+<li>by syf</li>
+</ul>
 
                 
             </div>
@@ -481,7 +554,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://salanfeng.github.io/2023/10/18/hello-world/">https://salanfeng.github.io/2023/10/18/hello-world/</a>
+                    <a href="https://salanfeng.github.io/2023/12/10/benchmark/">https://salanfeng.github.io/2023/12/10/benchmark/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -690,13 +763,13 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/12/10/benchmark/">
+                <a href="/2023/12/17/CPU%20%E8%AE%BE%E8%AE%A1%E6%96%87%E6%A1%A3-P7/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="如何在服务器使用docker运行NVIDIA HPC-Benchmarks？">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="CPU 设计文档P7">
                         
-                        <span class="card-title">如何在服务器使用docker运行NVIDIA HPC-Benchmarks？</span>
+                        <span class="card-title">CPU 设计文档P7</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -707,7 +780,7 @@
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-12-10
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-12-17
                         </span>
                         <span class="publish-author">
                             
@@ -724,7 +797,7 @@
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                本篇&nbsp;<i class="far fa-dot-circle"></i>
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
                 <a href="/2023/10/18/hello-world/">
@@ -754,7 +827,6 @@
                         </span>
                     </div>
                 </div>
-
                 
             </div>
         </div>
